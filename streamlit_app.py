@@ -39,13 +39,18 @@ try:
 except URLError as e:
   streamlit.error()
 
-
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * from FRUIT_LOAD_LIST")
-my_data_row = my_cur.fetchall()
 streamlit.header("The friut load list contains")
-streamlit.dataframe(my_data_row) 
+def get_fruit_load_list():
+      with my_cnx.cursor() as cur:
+            cur.execute("SELECT * from FRUIT_LOAD_LIST")
+            return curr.fetall()
+      
+if streamlit.button('Get Full frutit list'):
+      my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+      datarows=get_fruit_load_list()
+      streamlit.dataframe(datarows) 
+
+streamlit.stop()
 
 add_my_fruit = streamlit.text_input('What fruit you would like to add?','')
 streamlit.write('Thanks for entering ', add_my_fruit)
